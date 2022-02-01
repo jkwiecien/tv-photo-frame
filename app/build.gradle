@@ -17,6 +17,13 @@ android {
         }
     }
 
+    def secretsFile = file("../secret.properties")
+    Properties secrets = new Properties()
+
+    if (secretsFile.exists()) {
+        secrets.load(secretsFile.newDataInputStream())
+    }
+
     buildFeatures {
         compose true
     }
@@ -37,12 +44,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
     }
+
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file("../keystore.jks")
+            storePassword secrets.getProperty("tvphotoframe.keystore.password", System.getenv("TBTVPHOTOFRAME_KEYSTORE_PWD"))
+            keyAlias "tv-photo-frame-debug"
+            keyPassword secrets.getProperty("tvphotoframe.keystore.alias.debug.password", System.getenv("TBTVPHOTOFRAME_ALIAS_PWD"))
         }
     }
 }
