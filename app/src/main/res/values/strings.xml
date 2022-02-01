@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TV Photo frame</string>
+    <string name="title_activity_welcome">Welcome to TV Photo Frame</string>
 </resources>
