@@ -13,13 +13,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.techbrewery.tvphotoframe.R
 import net.techbrewery.tvphotoframe.core.ui.theme.AppTheme
-import net.techbrewery.tvphotoframe.core.ui.theme.Spacing
+import net.techbrewery.tvphotoframe.core.ui.theme.Dimens.ButtonPadding
 import net.techbrewery.tvphotoframe.core.ui.theme.Typography
 
 @Composable
 fun GoogleSignInButton() {
     Button(
-        modifier = Modifier.padding(Spacing.ButtonPadding),
+        modifier = Modifier.padding(ButtonPadding),
         onClick = {
             //TODO
         }
@@ -32,7 +32,7 @@ fun GoogleSignInButton() {
         Text(
             text = "Sign in with Google",
             style = Typography.labelLarge,
-            modifier = Modifier.padding(Spacing.ButtonPadding)
+            modifier = Modifier.padding(ButtonPadding)
         )
     }
 }

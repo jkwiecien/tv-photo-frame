@@ -5,7 +5,7 @@ import net.techbrewery.tvphotoframe.core.koin.ViewModelModule
 import net.techbrewery.tvphotoframe.core.logs.DebugLogsTree
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.startKoin
+import org.koin.core.context.GlobalContext.startKoin
 import org.koin.core.logger.Level
 import timber.log.Timber
 
@@ -13,7 +13,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        setupKoin()
+//        setupKoin()
         setupLogs()
     }
 

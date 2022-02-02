@@ -81,12 +81,13 @@ fun CredentialsTextFields(vm: WelcomeViewModel) {
     ) {
         TextField(
             value = vm.emailState,
-            label = { Text("Email") }, //FIXME
+//            label = { Text("Email") }, //FIXME
             onValueChange = { vm.setEmail(it) }
         )
+        Spacer(Modifier.size(Spacing.Small))
         TextField(
             value = vm.passwordState,
-            label = { Text("Password") }, //FIXME
+//            label = { Text("Password") }, //FIXME
             visualTransformation = PasswordVisualTransformation(),
             onValueChange = { vm.setPassword(it) }
         )
