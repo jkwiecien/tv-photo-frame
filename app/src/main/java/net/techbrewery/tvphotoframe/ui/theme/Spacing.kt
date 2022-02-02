@@ -8,4 +8,6 @@ object Spacing {
     val Large = (8 * 5).dp
     val XL = (8 * 6).dp
     val XXL = (8 * 7).dp
+
+    val ButtonPadding = (8 * 2).dp
 }

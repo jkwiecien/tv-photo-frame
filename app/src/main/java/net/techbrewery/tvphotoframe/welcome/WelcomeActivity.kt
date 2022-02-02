@@ -1,4 +1,4 @@
-package net.techbrewery.tvphotoframe
+package net.techbrewery.tvphotoframe.welcome
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
@@ -13,6 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import net.techbrewery.tvphotoframe.R
+import net.techbrewery.tvphotoframe.ui.google.GoogleSignInButton
 import net.techbrewery.tvphotoframe.ui.theme.AppTheme
 import net.techbrewery.tvphotoframe.ui.theme.Spacing
 import net.techbrewery.tvphotoframe.ui.theme.Typography
@@ -45,6 +47,7 @@ private fun SignInContent() {
     ) {
         Title()
         SignInDisclaimer()
+        GoogleSignInButton()
     }
 }
 
@@ -60,7 +63,7 @@ fun Title() {
 fun SignInDisclaimer() {
     Text(
         text = "In order to use Google Photos with TV Photo frame, you need to sign in into your Google account.", //FIXME
-        style = Typography.labelLarge,
+        style = Typography.bodyLarge,
         modifier = Modifier.padding(Spacing.Small)
     )
 }
@@ -83,6 +86,6 @@ fun SignInContentDarkPreview() {
     }
 }
 
-@Preview()
+@Preview
 @Composable
 fun DefaultPreview() = SignInContentDarkPreview()
