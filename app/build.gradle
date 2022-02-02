@@ -103,9 +103,17 @@ dependencies {
     implementation 'com.google.photos.library:google-photos-library-client:1.7.1'
     implementation platform('com.google.firebase:firebase-bom:29.0.4')
     implementation 'com.google.firebase:firebase-analytics'
+    // Koin Core features
+    implementation "io.insert-koin:koin-core:$koin_version"
+    // Koin main features for Android
+    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "io.insert-koin:koin-androidx-compose:$koin_version"
 
     // UI Tests
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.5'
     androidTestImplementation "androidx.test:core:1.4.0"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+    // Koin Test features
+    testImplementation "io.insert-koin:koin-test:$koin_version"
+    testImplementation "io.insert-koin:koin-test-junit4:$koin_version"
 }

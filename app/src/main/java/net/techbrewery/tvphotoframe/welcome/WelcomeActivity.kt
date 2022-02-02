@@ -47,6 +47,7 @@ private fun SignInContent() {
     ) {
         Title()
         SignInDisclaimer()
+        CredentialsTextFields()
         GoogleSignInButton()
     }
 }
@@ -66,6 +67,20 @@ fun SignInDisclaimer() {
         style = Typography.bodyLarge,
         modifier = Modifier.padding(Spacing.Small)
     )
+}
+
+@Composable
+fun CredentialsTextFields() {
+    Column(
+        modifier = Modifier.padding(Spacing.Large)
+    ) {
+//        TextField(
+//            value = textState.value,
+//            onValueChange = {
+//                //TODO
+//            }
+//        )
+    }
 }
 
 @Preview(
