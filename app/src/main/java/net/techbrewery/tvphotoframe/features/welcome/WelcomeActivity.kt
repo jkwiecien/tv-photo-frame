@@ -20,9 +20,11 @@ import net.techbrewery.tvphotoframe.core.ui.google.GoogleSignInButton
 import net.techbrewery.tvphotoframe.core.ui.theme.AppTheme
 import net.techbrewery.tvphotoframe.core.ui.theme.Spacing
 import net.techbrewery.tvphotoframe.core.ui.theme.Typography
-import org.koin.androidx.compose.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WelcomeActivity : ComponentActivity() {
+
+    private val viewModel by viewModel<WelcomeViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +34,12 @@ class WelcomeActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SignInContent()
+                    SignInContent(
+                        email = viewModel.emailState,
+                        onEmailChanged = { viewModel.setEmail(it) },
+                        password = viewModel.passwordState,
+                        onPasswordChanged = { viewModel.setPassword(it) }
+                    )
                 }
             }
         }
@@ -40,7 +47,12 @@ class WelcomeActivity : ComponentActivity() {
 }
 
 @Composable
-private fun SignInContent() {
+private fun SignInContent(
+    email: String = "",
+    onEmailChanged: (String) -> Unit = {},
+    password: String = "",
+    onPasswordChanged: (String) -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,10 +61,14 @@ private fun SignInContent() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        val vm by viewModel<WelcomeViewModel>()
         Title()
         SignInDisclaimer()
-        CredentialsTextFields(vm)
+        CredentialsTextFields(
+            email = email,
+            onEmailChanged = onEmailChanged,
+            password = password,
+            onPasswordChanged = onPasswordChanged
+        )
         GoogleSignInButton()
     }
 }
@@ -75,21 +91,26 @@ fun SignInDisclaimer() {
 }
 
 @Composable
-fun CredentialsTextFields(vm: WelcomeViewModel) {
+fun CredentialsTextFields(
+    email: String,
+    onEmailChanged: (String) -> Unit,
+    password: String,
+    onPasswordChanged: (String) -> Unit
+) {
     Column(
         modifier = Modifier.padding(Spacing.Large)
     ) {
         TextField(
-            value = vm.emailState,
+            value = email,
 //            label = { Text("Email") }, //FIXME
-            onValueChange = { vm.setEmail(it) }
+            onValueChange = onEmailChanged
         )
-        Spacer(Modifier.size(Spacing.Small))
+        Spacer(Modifier.height(Spacing.Small))
         TextField(
-            value = vm.passwordState,
+            value = password,
 //            label = { Text("Password") }, //FIXME
             visualTransformation = PasswordVisualTransformation(),
-            onValueChange = { vm.setPassword(it) }
+            onValueChange = onPasswordChanged
         )
     }
 }
