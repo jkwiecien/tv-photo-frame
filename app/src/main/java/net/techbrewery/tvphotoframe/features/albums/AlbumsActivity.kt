@@ -1,4 +1,4 @@
-package net.techbrewery.tvphotoframe.albums
+package net.techbrewery.tvphotoframe.features.albums
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import net.techbrewery.tvphotoframe.ui.theme.AppTheme
+import net.techbrewery.tvphotoframe.core.ui.theme.AppTheme
 
 class AlbumsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

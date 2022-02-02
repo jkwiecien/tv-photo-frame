@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TVPhotoFrame">
         <activity
-            android:name=".albums.AlbumsActivity"
+            android:name="net.techbrewery.tvphotoframe.features.albums.AlbumsActivity"
             android:exported="false"
             android:label="@string/title_activity_albums"
             android:theme="@style/Theme.TVPhotoFrame" />

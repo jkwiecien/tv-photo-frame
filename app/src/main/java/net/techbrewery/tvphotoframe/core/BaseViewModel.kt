@@ -1,4 +1,4 @@
-package net.techbrewery.tvphotoframe.base
+package net.techbrewery.tvphotoframe.core
 
 import androidx.lifecycle.ViewModel
 

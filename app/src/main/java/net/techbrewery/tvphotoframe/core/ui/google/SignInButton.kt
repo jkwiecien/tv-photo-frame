@@ -1,4 +1,4 @@
-package net.techbrewery.tvphotoframe.ui.google
+package net.techbrewery.tvphotoframe.core.ui.google
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
@@ -12,9 +12,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.techbrewery.tvphotoframe.R
-import net.techbrewery.tvphotoframe.ui.theme.AppTheme
-import net.techbrewery.tvphotoframe.ui.theme.Spacing
-import net.techbrewery.tvphotoframe.ui.theme.Typography
+import net.techbrewery.tvphotoframe.core.ui.theme.AppTheme
+import net.techbrewery.tvphotoframe.core.ui.theme.Spacing
+import net.techbrewery.tvphotoframe.core.ui.theme.Typography
 
 @Composable
 fun GoogleSignInButton() {

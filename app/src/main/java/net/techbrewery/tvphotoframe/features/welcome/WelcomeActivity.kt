@@ -1,10 +1,11 @@
-package net.techbrewery.tvphotoframe.welcome
+package net.techbrewery.tvphotoframe.features.welcome
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.TextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -14,12 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import net.techbrewery.tvphotoframe.R
-import net.techbrewery.tvphotoframe.ui.google.GoogleSignInButton
-import net.techbrewery.tvphotoframe.ui.theme.AppTheme
-import net.techbrewery.tvphotoframe.ui.theme.Spacing
-import net.techbrewery.tvphotoframe.ui.theme.Typography
+import net.techbrewery.tvphotoframe.core.ui.google.GoogleSignInButton
+import net.techbrewery.tvphotoframe.core.ui.theme.AppTheme
+import net.techbrewery.tvphotoframe.core.ui.theme.Spacing
+import net.techbrewery.tvphotoframe.core.ui.theme.Typography
+import org.koin.androidx.compose.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WelcomeActivity : ComponentActivity() {
+    private val viewModel by viewModel<WelcomeViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -74,12 +79,11 @@ fun CredentialsTextFields() {
     Column(
         modifier = Modifier.padding(Spacing.Large)
     ) {
-//        TextField(
-//            value = textState.value,
-//            onValueChange = {
-//                //TODO
-//            }
-//        )
+        val vm by viewModel<WelcomeViewModel>()
+        TextField(
+            value = vm.emailState,
+            onValueChange = { vm.setEmail(it) }
+        )
     }
 }
 
