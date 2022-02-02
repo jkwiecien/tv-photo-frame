@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -39,10 +40,11 @@ android {
     }
 
     buildTypes {
-//        release {
-//            minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -62,11 +64,17 @@ android {
     }
 
     signingConfigs {
+        release {
+            storeFile file("../release.keystore")
+            storePassword secrets.getProperty("tvphotoframe.keystore.release.password", System.getenv("TBTVPHOTOFRAME_KEYSTORE_RELEASE_PWD"))
+            keyAlias "tvphotoframe-release"
+            keyPassword secrets.getProperty("tvphotoframe.keystore.release.password", System.getenv("TBTVPHOTOFRAME_KEYSTORE_RELEASE_PWD"))
+        }
         debug {
-            storeFile file("../keystore.jks")
-            storePassword secrets.getProperty("tvphotoframe.keystore.password", System.getenv("TBTVPHOTOFRAME_KEYSTORE_PWD"))
-            keyAlias "tv-photo-frame-debug"
-            keyPassword secrets.getProperty("tvphotoframe.keystore.alias.debug.password", System.getenv("TBTVPHOTOFRAME_ALIAS_PWD"))
+            storeFile file("../debug.keystore")
+            storePassword secrets.getProperty("tvphotoframe.keystore.debug.password", System.getenv("TBTVPHOTOFRAME_KEYSTORE_DEBUG_PWD"))
+            keyAlias "tvphotoframe-debug"
+            keyPassword secrets.getProperty("tvphotoframe.keystore.debug.password", System.getenv("TBTVPHOTOFRAME_KEYSTORE_DEBUG_PWD"))
         }
     }
 }
@@ -93,6 +101,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation 'com.google.photos.library:google-photos-library-client:1.7.1'
+    implementation platform('com.google.firebase:firebase-bom:29.0.4')
+    implementation 'com.google.firebase:firebase-analytics'
 
     // UI Tests
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.5'

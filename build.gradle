@@ -3,6 +3,10 @@ buildscript {
         compose_version = '1.2.0-alpha02'
         lifecycle_version = '2.4.0'
     }
+
+    dependencies {
+        classpath 'com.google.gms:google-services:4.3.10'
+    }
 }
 
 plugins {
