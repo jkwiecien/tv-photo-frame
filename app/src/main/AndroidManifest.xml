@@ -19,13 +19,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.TVPhotoFrame">
+
         <activity
-            android:name="net.techbrewery.tvphotoframe.features.albums.AlbumsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_albums"
-            android:theme="@style/Theme.TVPhotoFrame" />
-        <activity
-            android:name=".WelcomeActivity"
+            android:name=".features.welcome.WelcomeActivity"
             android:exported="true"
             android:label="@string/title_activity_welcome"
             android:theme="@style/Theme.TVPhotoFrame">
@@ -35,6 +31,12 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".features.albums.AlbumsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_albums"
+            android:theme="@style/Theme.TVPhotoFrame" />
     </application>
 
 </manifest>

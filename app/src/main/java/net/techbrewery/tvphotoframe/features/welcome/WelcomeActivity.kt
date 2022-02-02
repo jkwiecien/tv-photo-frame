@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import net.techbrewery.tvphotoframe.R
 import net.techbrewery.tvphotoframe.core.ui.google.GoogleSignInButton
@@ -20,10 +21,8 @@ import net.techbrewery.tvphotoframe.core.ui.theme.AppTheme
 import net.techbrewery.tvphotoframe.core.ui.theme.Spacing
 import net.techbrewery.tvphotoframe.core.ui.theme.Typography
 import org.koin.androidx.compose.viewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WelcomeActivity : ComponentActivity() {
-    private val viewModel by viewModel<WelcomeViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,9 +49,10 @@ private fun SignInContent() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        val vm by viewModel<WelcomeViewModel>()
         Title()
         SignInDisclaimer()
-        CredentialsTextFields()
+        CredentialsTextFields(vm)
         GoogleSignInButton()
     }
 }
@@ -75,22 +75,28 @@ fun SignInDisclaimer() {
 }
 
 @Composable
-fun CredentialsTextFields() {
+fun CredentialsTextFields(vm: WelcomeViewModel) {
     Column(
         modifier = Modifier.padding(Spacing.Large)
     ) {
-        val vm by viewModel<WelcomeViewModel>()
         TextField(
             value = vm.emailState,
+            label = { Text("Email") }, //FIXME
             onValueChange = { vm.setEmail(it) }
+        )
+        TextField(
+            value = vm.passwordState,
+            label = { Text("Password") }, //FIXME
+            visualTransformation = PasswordVisualTransformation(),
+            onValueChange = { vm.setPassword(it) }
         )
     }
 }
 
 @Preview(
     showBackground = true,
-    widthDp = 1920,
-    heightDp = 1080,
+    widthDp = 1024,
+    heightDp = 768,
     uiMode = UI_MODE_NIGHT_YES
 )
 @Composable

@@ -3,8 +3,6 @@ package net.techbrewery.tvphotoframe.features.welcome
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import net.techbrewery.tvphotoframe.core.BaseViewModel
 
 class WelcomeViewModel : BaseViewModel() {
@@ -12,10 +10,13 @@ class WelcomeViewModel : BaseViewModel() {
         private set
 
     fun setEmail(email: String) {
-        emailState = email
+        if (emailState != email) emailState = email
     }
-//    val emailFlow: StateFlow<String> = emailMutableFlow
 
-    private val passwordMutableFlow = MutableStateFlow("")
-    val passwordFlow: StateFlow<String> = passwordMutableFlow
+    var passwordState by mutableStateOf("")
+        private set
+
+    fun setPassword(password: String) {
+        if (passwordState != password) passwordState = password
+    }
 }
