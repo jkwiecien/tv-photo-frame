@@ -8,6 +8,6 @@ import org.koin.dsl.module
 object ViewModelModule {
     val get: Module
         get() = module {
-            viewModel { WelcomeViewModel() }
+            viewModel { WelcomeViewModel(get()) }
         }
 }

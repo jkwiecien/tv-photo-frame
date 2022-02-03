@@ -3,16 +3,13 @@ package net.techbrewery.tvphotoframe.features.welcome
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.gson.GsonFactory
-import com.google.api.gax.core.FixedCredentialsProvider
-import com.google.auth.Credentials
-import com.google.photos.library.v1.PhotosLibrarySettings
-import com.sun.org.apache.xpath.internal.operations.Plus
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow
 import net.techbrewery.tvphotoframe.core.BaseViewModel
 
 
-class WelcomeViewModel : BaseViewModel() {
+class WelcomeViewModel(
+    private val googleAuthCodeFlow: GoogleAuthorizationCodeFlow
+) : BaseViewModel() {
     var emailState by mutableStateOf("")
         private set
 
@@ -28,19 +25,26 @@ class WelcomeViewModel : BaseViewModel() {
     }
 
     fun onSignInClicked() {
-        val credential: GoogleCredential = GoogleCredential().setAccessToken(accessToken)
-        val plus: Plus = builder(
-            NetHttpTransport(),
-            GsonFactory.getDefaultInstance(),
-            credential
-        )
-            .setApplicationName("Google-PlusSample/1.0")
-            .build()
+        val credential = googleAuthCodeFlow.loadCredential(emailState)
+        if (credential != null) {
+            //TODO
+        } else {
+            googleAuthCodeFlow.newAuthorizationUrl()
+        }
 
-        val settings = PhotosLibrarySettings.newBuilder()
-            .setCredentialsProvider(
-                FixedCredentialsProvider.create(Credentials())
-            )
-            .build()
+//        val credential: GoogleCredential = GoogleCredential().setAccessToken(accessToken)
+//        val plus: Plus = builder(
+//            NetHttpTransport(),
+//            GsonFactory.getDefaultInstance(),
+//            credential
+//        )
+//            .setApplicationName("Google-PlusSample/1.0")
+//            .build()
+//
+//        val settings = PhotosLibrarySettings.newBuilder()
+//            .setCredentialsProvider(
+//                FixedCredentialsProvider.create(Credentials())
+//            )
+//            .build()
     }
 }

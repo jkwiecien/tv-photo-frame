@@ -1,5 +1,6 @@
 package net.techbrewery.tvphotoframe.features.welcome
 
+import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import net.techbrewery.tvphotoframe.R
+import net.techbrewery.tvphotoframe.core.logs.DevDebugLog
 import net.techbrewery.tvphotoframe.core.ui.google.GoogleSignInButton
 import net.techbrewery.tvphotoframe.core.ui.theme.AppTheme
 import net.techbrewery.tvphotoframe.core.ui.theme.Spacing
@@ -43,6 +45,11 @@ class WelcomeActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        DevDebugLog.log("Intent received")
     }
 }
 

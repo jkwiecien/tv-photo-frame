@@ -40,15 +40,17 @@ android {
     }
 
     buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
-        }
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.debug
+//        }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
+            buildConfigField "String", "OAUTH_CLIENT_ID", "\"958960862779-ip0na3ls312h6u32e9jejfam46a3jfsd.apps.googleusercontent.com\""
+            buildConfigField "String", "OAUTH_CLIENT_SECRET", "\"${secrets.getProperty("tvphotoframe.oauth.client.secret", System.getenv("TBTVPHOTOFRAME_OAUTH_CLIENT_SECRET"))}\""
         }
     }
 
@@ -100,6 +102,7 @@ dependencies {
     // Integration with ViewModels
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation 'com.google.api-client:google-api-client:1.31.5'
     implementation 'com.google.photos.library:google-photos-library-client:1.7.1'
     implementation platform('com.google.firebase:firebase-bom:29.0.4')
     implementation 'com.google.firebase:firebase-analytics'
