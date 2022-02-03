@@ -24,15 +24,6 @@ output.json
 *.iml
 .idea/
 
-# Keystore files
-*.jks
-*.keystore
-secret.properties
-
-# Google Services (e.g. APIs or Firebase)
-google-services.json
-google-oauth-credentials.json
-
 # Android Profiling
 *.hprof
 
