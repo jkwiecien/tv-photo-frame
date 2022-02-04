@@ -17,12 +17,10 @@ import net.techbrewery.tvphotoframe.core.ui.theme.Dimens.ButtonPadding
 import net.techbrewery.tvphotoframe.core.ui.theme.Typography
 
 @Composable
-fun GoogleSignInButton() {
+fun GoogleSignInButton(onSignInClicked: () -> Unit) {
     Button(
         modifier = Modifier.padding(ButtonPadding),
-        onClick = {
-            //TODO
-        }
+        onClick = onSignInClicked
     ) {
         Image(
             painter = painterResource(R.drawable.ic_google_logo),
@@ -44,6 +42,6 @@ fun GoogleSignInButton() {
 @Composable
 fun DefaultPreview() {
     AppTheme {
-        GoogleSignInButton()
+        GoogleSignInButton {}
     }
 }

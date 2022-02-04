@@ -40,7 +40,8 @@ class WelcomeActivity : ComponentActivity() {
                         email = viewModel.emailState,
                         onEmailChanged = { viewModel.setEmail(it) },
                         password = viewModel.passwordState,
-                        onPasswordChanged = { viewModel.setPassword(it) }
+                        onPasswordChanged = { viewModel.setPassword(it) },
+                        onSignInClicked = { viewModel.onSignInClicked() }
                     )
                 }
             }
@@ -49,7 +50,7 @@ class WelcomeActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        DevDebugLog.log("Intent received")
+        DevDebugLog.log("Intent received: $intent")
     }
 }
 
@@ -58,7 +59,8 @@ private fun SignInContent(
     email: String = "",
     onEmailChanged: (String) -> Unit = {},
     password: String = "",
-    onPasswordChanged: (String) -> Unit = {}
+    onPasswordChanged: (String) -> Unit = {},
+    onSignInClicked: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -76,7 +78,7 @@ private fun SignInContent(
             password = password,
             onPasswordChanged = onPasswordChanged
         )
-        GoogleSignInButton()
+        GoogleSignInButton(onSignInClicked)
     }
 }
 

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow
 import net.techbrewery.tvphotoframe.core.BaseViewModel
+import net.techbrewery.tvphotoframe.core.logs.DevDebugLog
 
 
 class WelcomeViewModel(
@@ -27,8 +28,10 @@ class WelcomeViewModel(
     fun onSignInClicked() {
         val credential = googleAuthCodeFlow.loadCredential(emailState)
         if (credential != null) {
+            DevDebugLog.log("Credential found: $credential")
             //TODO
         } else {
+            DevDebugLog.log("No credentials were found. Firing newAuthorizationUrl()")
             googleAuthCodeFlow.newAuthorizationUrl()
         }
 
