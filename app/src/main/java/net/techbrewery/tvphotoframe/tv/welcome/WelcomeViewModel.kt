@@ -1,9 +1,10 @@
-package net.techbrewery.tvphotoframe.features.welcome
+package net.techbrewery.tvphotoframe.tv.welcome
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow
+import net.techbrewery.tvphotoframe.BuildConfig
 import net.techbrewery.tvphotoframe.core.BaseViewModel
 import net.techbrewery.tvphotoframe.core.logs.DevDebugLog
 
@@ -11,7 +12,7 @@ import net.techbrewery.tvphotoframe.core.logs.DevDebugLog
 class WelcomeViewModel(
     private val googleAuthCodeFlow: GoogleAuthorizationCodeFlow
 ) : BaseViewModel() {
-    var emailState by mutableStateOf("")
+    var emailState by mutableStateOf("jacek.kwiecien@gmail.com")
         private set
 
     fun setEmail(email: String) {
@@ -32,7 +33,10 @@ class WelcomeViewModel(
             //TODO
         } else {
             DevDebugLog.log("No credentials were found. Firing newAuthorizationUrl()")
-            googleAuthCodeFlow.newAuthorizationUrl()
+            val authUrl = googleAuthCodeFlow.newAuthorizationUrl()
+            authUrl.redirectUri = BuildConfig.REDIRECT_URI
+            DevDebugLog.log("Auth url: $authUrl")
+            sendEvent(GoogleAuthUrlReceived(authUrl.toString()))
         }
 
 //        val credential: GoogleCredential = GoogleCredential().setAccessToken(accessToken)

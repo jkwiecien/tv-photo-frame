@@ -21,7 +21,7 @@
         android:theme="@style/Theme.TVPhotoFrame">
 
         <activity
-            android:name=".features.welcome.WelcomeActivity"
+            android:name=".tv.welcome.WelcomeActivity"
             android:exported="true"
             android:label="@string/title_activity_welcome"
             android:theme="@style/Theme.TVPhotoFrame">
@@ -29,6 +29,28 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.VIEW" />-->
+
+            <!--                <category android:name="android.intent.category.DEFAULT" />-->
+            <!--                <category android:name="android.intent.category.BROWSABLE" />-->
+
+            <!--                <data-->
+            <!--                    android:host="tb-tv-photo-frame.firebaseapp.com/__/auth/handler"-->
+            <!--                    android:scheme="https" />-->
+            <!--            </intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".mobile.welcome.WelcomeMobileActivity"
+            android:exported="true"
+            android:label="@string/title_activity_welcome"
+            android:theme="@style/Theme.TVPhotoFrame">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -43,7 +65,7 @@
         </activity>
 
         <activity
-            android:name=".features.albums.AlbumsActivity"
+            android:name=".tv.albums.AlbumsActivity"
             android:exported="false"
             android:label="@string/title_activity_albums"
             android:theme="@style/Theme.TVPhotoFrame" />

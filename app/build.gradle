@@ -5,6 +5,13 @@ plugins {
 }
 
 android {
+    def secretsFile = file("../secret.properties")
+    Properties secrets = new Properties()
+
+    if (secretsFile.exists()) {
+        secrets.load(secretsFile.newDataInputStream())
+    }
+
     compileSdk 32
 
     defaultConfig {
@@ -16,13 +23,8 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-    }
 
-    def secretsFile = file("../secret.properties")
-    Properties secrets = new Properties()
-
-    if (secretsFile.exists()) {
-        secrets.load(secretsFile.newDataInputStream())
+        buildConfigField "String", "REDIRECT_URI", "\"${secrets.getProperty("tvphotoframe.oauth.redirect.uri", System.getenv("TBTVPHOTOFRAME_OAUTH_REDIRECT_URI"))}\""
     }
 
     buildFeatures {

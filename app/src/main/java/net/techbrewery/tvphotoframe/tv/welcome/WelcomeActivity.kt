@@ -1,9 +1,9 @@
-package net.techbrewery.tvphotoframe.features.welcome
+package net.techbrewery.tvphotoframe.tv.welcome
 
 import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.net.Uri
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.TextField
@@ -16,7 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import net.techbrewery.tvphotoframe.R
+import net.techbrewery.tvphotoframe.core.BaseActivity
 import net.techbrewery.tvphotoframe.core.logs.DevDebugLog
 import net.techbrewery.tvphotoframe.core.ui.google.GoogleSignInButton
 import net.techbrewery.tvphotoframe.core.ui.theme.AppTheme
@@ -24,7 +29,7 @@ import net.techbrewery.tvphotoframe.core.ui.theme.Spacing
 import net.techbrewery.tvphotoframe.core.ui.theme.Typography
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class WelcomeActivity : ComponentActivity() {
+class WelcomeActivity : BaseActivity() {
 
     private val viewModel by viewModel<WelcomeViewModel>()
 
@@ -46,7 +51,25 @@ class WelcomeActivity : ComponentActivity() {
                 }
             }
         }
+        setupStateObservers()
     }
+
+    private fun setupStateObservers() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.eventsFlow.collect { event ->
+                when (val payload = event.getContentIfNotHandled()) {
+                    is GoogleAuthUrlReceived -> {
+                        val url = payload.url
+                        DevDebugLog.log("authUrl observed: ${payload.url}")
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        intent.data = Uri.parse(url)
+                        startActivity(intent)
+                    }
+                }
+            }
+        }
+    }
+
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
@@ -55,7 +78,7 @@ class WelcomeActivity : ComponentActivity() {
 }
 
 @Composable
-private fun SignInContent(
+fun SignInContent(
     email: String = "",
     onEmailChanged: (String) -> Unit = {},
     password: String = "",
@@ -72,13 +95,13 @@ private fun SignInContent(
     ) {
         Title()
         SignInDisclaimer()
-        CredentialsTextFields(
-            email = email,
-            onEmailChanged = onEmailChanged,
-            password = password,
-            onPasswordChanged = onPasswordChanged
-        )
         GoogleSignInButton(onSignInClicked)
+//        CredentialsTextFields(
+//            email = email,
+//            onEmailChanged = onEmailChanged,
+//            password = password,
+//            onPasswordChanged = onPasswordChanged
+//        )
     }
 }
 
@@ -93,7 +116,7 @@ fun Title() {
 @Composable
 fun SignInDisclaimer() {
     Text(
-        text = "In order to use Google Photos with TV Photo frame, you need to sign in into your Google account.", //FIXME
+        text = "W końcu sie doigra", //FIXME
         style = Typography.bodyLarge,
         modifier = Modifier.padding(Spacing.Small)
     )

@@ -2,6 +2,7 @@ package net.techbrewery.tvphotoframe.core.ui.google
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
@@ -19,7 +20,9 @@ import net.techbrewery.tvphotoframe.core.ui.theme.Typography
 @Composable
 fun GoogleSignInButton(onSignInClicked: () -> Unit) {
     Button(
-        modifier = Modifier.padding(ButtonPadding),
+        modifier = Modifier
+            .padding(ButtonPadding)
+            .focusable(enabled = true),
         onClick = onSignInClicked
     ) {
         Image(

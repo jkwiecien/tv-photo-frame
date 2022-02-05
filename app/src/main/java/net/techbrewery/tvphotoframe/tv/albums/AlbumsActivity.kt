@@ -1,4 +1,4 @@
-package net.techbrewery.tvphotoframe.features.albums
+package net.techbrewery.tvphotoframe.tv.albums
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
