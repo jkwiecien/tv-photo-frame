@@ -14,10 +14,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.Scope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import net.techbrewery.tvphotoframe.core.BaseActivity
+import net.techbrewery.tvphotoframe.core.RequestCodes
+import net.techbrewery.tvphotoframe.core.extensions.logAllExtras
 import net.techbrewery.tvphotoframe.core.logs.DevDebugLog
 import net.techbrewery.tvphotoframe.core.ui.google.GoogleSignInButton
 import net.techbrewery.tvphotoframe.core.ui.theme.AppTheme
@@ -30,9 +34,11 @@ class WelcomeMobileActivity : BaseActivity() {
     private val viewModel by viewModel<WelcomeMobileViewModel>()
 
     private val startAccountPicker =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
+                data?.extras?.logAllExtras()
                 val accountName = data?.extras?.get(AccountManager.KEY_ACCOUNT_NAME)
                 DevDebugLog.log("Selected account: $accountName")
             }
@@ -48,7 +54,7 @@ class WelcomeMobileActivity : BaseActivity() {
                 ) {
                     Column {
                         GoogleSignInButton(
-                            onSignInClicked = { requestAccountsPicker() }
+                            onSignInClicked = { startAuth() }
                         )
                     }
                 }
@@ -73,6 +79,22 @@ class WelcomeMobileActivity : BaseActivity() {
         }
     }
 
+    private fun startAuth() {
+        GoogleSignIn.requestPermissions(
+            this,
+            RequestCodes.GOOGLE_PHOTOS_AUTH,
+            GoogleSignIn.getLastSignedInAccount(this),
+            Scope("https://www.googleapis.com/auth/photoslibrary.readonly")
+        )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RESULT_OK && requestCode == RequestCodes.GOOGLE_PHOTOS_AUTH) {
+            DevDebugLog.log("Authorized Google Photos")
+        }
+    }
+
     private fun requestAccountsPicker() {
         val intent = AccountManager.newChooseAccountIntent(
             null,
@@ -83,7 +105,7 @@ class WelcomeMobileActivity : BaseActivity() {
             null,
             null
         )
-
+        DevDebugLog.log("Starting account picker")
         startAccountPicker.launch(intent)
     }
 }
