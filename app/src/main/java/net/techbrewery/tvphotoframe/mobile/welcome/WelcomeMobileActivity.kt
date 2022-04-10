@@ -1,10 +1,14 @@
 package net.techbrewery.tvphotoframe.mobile.welcome
 
+import android.accounts.Account
 import android.accounts.AccountManager
+import android.accounts.AccountManagerCallback
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,12 +30,14 @@ import net.techbrewery.tvphotoframe.core.logs.DevDebugLog
 import net.techbrewery.tvphotoframe.core.ui.google.GoogleSignInButton
 import net.techbrewery.tvphotoframe.core.ui.theme.AppTheme
 import net.techbrewery.tvphotoframe.tv.welcome.GoogleAuthUrlReceived
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class WelcomeMobileActivity : BaseActivity() {
 
     private val viewModel by viewModel<WelcomeMobileViewModel>()
+    private val accountManager by inject<AccountManager>()
 
     private val startAccountPicker =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult())
@@ -39,8 +45,10 @@ class WelcomeMobileActivity : BaseActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
                 data?.extras?.logAllExtras()
-                val accountName = data?.extras?.get(AccountManager.KEY_ACCOUNT_NAME)
-                DevDebugLog.log("Selected account: $accountName")
+                val accountName: String = data?.extras?.getString(AccountManager.KEY_ACCOUNT_NAME)!!
+                val accountType: String = data.extras?.getString(AccountManager.KEY_ACCOUNT_TYPE)!!
+                DevDebugLog.log("Selected account: $accountName with type: $accountType")
+                onAccountPicked(accountName, accountType)
             }
         }
 
@@ -54,7 +62,7 @@ class WelcomeMobileActivity : BaseActivity() {
                 ) {
                     Column {
                         GoogleSignInButton(
-                            onSignInClicked = { startAuth() }
+                            onSignInClicked = { startAuth2() }
                         )
                     }
                 }
@@ -88,14 +96,7 @@ class WelcomeMobileActivity : BaseActivity() {
         )
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RESULT_OK && requestCode == RequestCodes.GOOGLE_PHOTOS_AUTH) {
-            DevDebugLog.log("Authorized Google Photos")
-        }
-    }
-
-    private fun requestAccountsPicker() {
+    private fun startAuth2() {
         val intent = AccountManager.newChooseAccountIntent(
             null,
             null,
@@ -108,4 +109,45 @@ class WelcomeMobileActivity : BaseActivity() {
         DevDebugLog.log("Starting account picker")
         startAccountPicker.launch(intent)
     }
+
+    private fun onAccountPicked(accountName: String, accountType: String) {
+        val account = Account(accountName, accountType)
+        val onTokenAcquired = AccountManagerCallback<Bundle> { result ->
+            DevDebugLog.log("On token result acquired")
+            // Get the result of the operation from the AccountManagerFuture.
+            val resultType = result.result
+            val bundle: Bundle = result.result
+
+            // The token is a named value in the bundle. The name of the value
+            // is stored in the constant AccountManager.KEY_AUTHTOKEN.
+            val token: String? = bundle.getString(AccountManager.KEY_AUTHTOKEN)
+            DevDebugLog.log("Token acquired: $token")
+        }
+
+        val onError = Handler(
+            Looper.getMainLooper()
+        ) {
+            DevDebugLog.log("Handler: Error while trying to auth")
+            true
+        }
+
+
+        accountManager.getAuthToken(
+            account,                     // Account retrieved using getAccountsByType()
+            "https://www.googleapis.com/auth/photoslibrary.readonly",
+            Bundle(),                        // Authenticator-specific options
+            this,                           // Your activity
+            onTokenAcquired,              // Callback called when a token is successfully acquired
+            onError            // Callback called if an error occurs
+        )
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RESULT_OK && requestCode == RequestCodes.GOOGLE_PHOTOS_AUTH) {
+            DevDebugLog.log("Authorized Google Photos")
+        }
+    }
+
 }
