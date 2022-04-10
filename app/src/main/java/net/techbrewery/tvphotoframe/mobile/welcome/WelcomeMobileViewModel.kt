@@ -13,16 +13,24 @@ class WelcomeMobileViewModel(private val accountManager: AccountManager) : BaseV
 //        }
 //    }
 
-    fun getAccessToken(accountName: String, accountType: String) {
+//    fun getAccessToken(accountName: String, accountType: String) {
 //        val account = Account(accountName, accountType)
+////        accountManager.getAuthToken(
+////            account,                     // Account retrieved using getAccountsByType()
+////            "Manage your tasks",            // Auth scope
+////            null,                        // Authenticator-specific options
+////            true,                           // Your activity
+////            object :
+////                AccountManagerCallback<Bundle>,              // Callback called when a token is successfully acquired
+////                Handler()              // Callback called if an error occurs
+////        )
 //        accountManager.getAuthToken(
 //            account,                     // Account retrieved using getAccountsByType()
-//            "Manage your tasks",            // Auth scope
+//            "https://www.googleapis.com/auth/photoslibrary.readonly",            // Auth scope
 //            null,                        // Authenticator-specific options
-//            true,                           // Your activity
-//            object :
-//                AccountManagerCallback<Bundle>,              // Callback called when a token is successfully acquired
-//                Handler()              // Callback called if an error occurs
+//            this,                           // Your activity
+//            OnTokenAcquired(),              // Callback called when a token is successfully acquired
+//            Handler(Looper.getMainLooper())              // Callback called if an error occurs
 //        )
-    }
+//    }
 }
