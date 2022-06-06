@@ -9,20 +9,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
+import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,16 +26,27 @@ import net.techbrewery.tvphotoframe.core.BaseActivity
 import net.techbrewery.tvphotoframe.core.RequestCodes
 import net.techbrewery.tvphotoframe.core.extensions.logAllExtras
 import net.techbrewery.tvphotoframe.core.logs.DevDebugLog
-import net.techbrewery.tvphotoframe.core.ui.google.GoogleSignInButton
-import net.techbrewery.tvphotoframe.core.ui.theme.AppTheme
+import net.techbrewery.tvphotoframe.network.AccessTokenRequestBody
 import net.techbrewery.tvphotoframe.network.AuthApi
-import net.techbrewery.tvphotoframe.network.AuthTokenPostBody
 import net.techbrewery.tvphotoframe.tv.welcome.GoogleAuthUrlReceived
+import okhttp3.HttpUrl
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class WelcomeMobileActivity : BaseActivity() {
+
+    companion object {
+        private val AUTH_URL = HttpUrl.Builder()
+            .scheme("https")
+            .host("accounts.google.com")
+            .encodedPath("/o/oauth2/v2/auth")
+            .addQueryParameter("client_id", BuildConfig.OAUTH_CLIENT_ID)
+            .addQueryParameter("redirect_uri", BuildConfig.REDIRECT_URI)
+            .addQueryParameter("response_type", "code")
+            .addQueryParameter("scope", "https://www.googleapis.com/auth/photoslibrary.readonly")
+            .build()
+    }
 
     private val viewModel by viewModel<WelcomeMobileViewModel>()
     private val accountManager by inject<AccountManager>()
@@ -77,28 +83,29 @@ class WelcomeMobileActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val gso = GoogleSignIn.getLastSignedInAccount(this)
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(AUTH_URL.toString()))
+        startActivity(browserIntent)
 
-        setContent {
-            AppTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Column {
-                        if (gso == null) {
-                            GoogleSignInButton(
-                                onSignInClicked = { startAuth() }
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-        if (gso != null) onLoggedIn(gso)
-
-//        setupStateObservers()
+//        val gso = GoogleSignIn.getLastSignedInAccount(this)
+//
+//        setContent {
+//            AppTheme {
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = MaterialTheme.colorScheme.background
+//                ) {
+//                    Column {
+//                        if (gso == null) {
+//                            GoogleSignInButton(
+//                                onSignInClicked = { startAuth() }
+//                            )
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        if (gso != null) onLoggedIn2(gso)
     }
 
     private fun onLoggedIn(gso: GoogleSignInAccount) {
@@ -108,7 +115,24 @@ class WelcomeMobileActivity : BaseActivity() {
             lifecycleScope.launch(Dispatchers.Main) {
                 DevDebugLog.log("Sending id token: $idToken")
                 val api by inject<AuthApi>()
-                withContext(Dispatchers.IO) { api.getAuthToken(AuthTokenPostBody(idToken)) }
+                withContext(Dispatchers.IO) { api.getAccessToken(AccessTokenRequestBody(idToken)) }
+            }
+        }
+    }
+
+    private fun onLoggedIn2(gso: GoogleSignInAccount) {
+        val idToken = gso.idToken
+        DevDebugLog.log("ID token: $idToken")
+
+        val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
+        firebaseCredential
+
+        if (idToken != null) {
+            lifecycleScope.launch(Dispatchers.Main) {
+                DevDebugLog.log("Sending id token: $idToken")
+                val api by inject<AuthApi>()
+                val authUrl = withContext(Dispatchers.IO) { api.getAUthUrl() }
+                DevDebugLog.log("Auth url: $authUrl")
             }
         }
     }

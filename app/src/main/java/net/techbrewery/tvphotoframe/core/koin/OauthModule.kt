@@ -52,7 +52,13 @@ object OauthModule {
             single<Retrofit> {
                 Retrofit.Builder()
                     .baseUrl("http://localhost/")
-                    .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+                    .addConverterFactory(
+                        GsonConverterFactory.create(
+                            GsonBuilder()
+//                                .setLenient()
+                                .create()
+                        )
+                    )
                     .addConverterFactory(ToStringConverterFactory())
                     .client(get())
                     .build()

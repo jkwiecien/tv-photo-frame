@@ -54,6 +54,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
             buildConfigField "String", "OAUTH_CLIENT_ID", "\"958960862779-ip0na3ls312h6u32e9jejfam46a3jfsd.apps.googleusercontent.com\""
+            buildConfigField "String", "OAUTH_CLIENT_SECRET", "\"958960862779-ip0na3ls312h6u32e9jejfam46a3jfsd.apps.googleusercontent.com\""
             buildConfigField "String", "OAUTH_WEB_CLIENT_ID", "\"958960862779-ip0na3ls312h6u32e9jejfam46a3jfsd.apps.googleusercontent.com\""
             buildConfigField "String", "OAUTH_WEB_CLIENT_SECRET", "\"${secrets.getProperty("tvphotoframe.oauth.web.client.secret", System.getenv("TBTVPHOTOFRAME_OAUTH_WEB_CLIENT_SECRET"))}\""
         }
@@ -118,6 +119,7 @@ dependencies {
     implementation "io.insert-koin:koin-androidx-compose:$koin_version"
     implementation 'com.jakewharton.timber:timber:5.0.1'
     implementation 'com.google.android.gms:play-services-auth:20.2.0'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.5'
 
     // UI Tests
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.1'
@@ -129,4 +131,6 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation("com.squareup.okhttp3:logging-interceptor:3.9.0")
+
+    implementation "com.google.accompanist:accompanist-webview:$accompanist_version"
 }
