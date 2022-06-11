@@ -1,4 +1,4 @@
-package net.techbrewery.tvphotoframe.network
+package net.techbrewery.tvphotoframe.network.responses
 
 data class AuthTokenResponse(
     val access_token: String,

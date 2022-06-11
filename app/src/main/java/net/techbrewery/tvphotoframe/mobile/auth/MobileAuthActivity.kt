@@ -9,14 +9,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.techbrewery.tvphotoframe.core.BaseActivity
+import net.techbrewery.tvphotoframe.core.koin.OAuth2Module
+import net.techbrewery.tvphotoframe.core.koin.PhotosApiModule
 import net.techbrewery.tvphotoframe.core.logs.DevDebugLog
-import net.techbrewery.tvphotoframe.network.AccessTokenRequestBody
-import net.techbrewery.tvphotoframe.network.AuthApi
+import net.techbrewery.tvphotoframe.network.OAuth2APi
+import net.techbrewery.tvphotoframe.network.PhotosApi
+import net.techbrewery.tvphotoframe.network.requests.AccessTokenRequestBody
 import org.koin.android.ext.android.inject
+import org.koin.core.qualifier.named
 
 class MobileAuthActivity : BaseActivity() {
 
-    private val api: AuthApi by inject()
+    private val authApi: OAuth2APi by inject(named(OAuth2Module.MODULE_NAME))
+    private val photosApi: PhotosApi by inject(named(PhotosApiModule.MODULE_NAME))
 
     companion object {
         fun start(activity: Activity) {
@@ -35,10 +40,10 @@ class MobileAuthActivity : BaseActivity() {
         lifecycleScope.launch(Dispatchers.Main) {
             val authCode = data.getQueryParameter("code")!!
             val accessTokenResponse =
-                withContext(Dispatchers.IO) { api.getAccessToken(AccessTokenRequestBody(authCode)) }
+                withContext(Dispatchers.IO) { authApi.getAccessToken(AccessTokenRequestBody(authCode)) }
             DevDebugLog.log("Auth token received: $accessTokenResponse")
             val albumsResponse =
-                withContext(Dispatchers.IO) { api.getAlbums(accessTokenResponse.access_token) }
+                withContext(Dispatchers.IO) { photosApi.getAlbums(accessTokenResponse.access_token) }
             DevDebugLog.log("Next page token: ${albumsResponse.nextPageToken}")
             albumsResponse.albums.forEach {
                 DevDebugLog.log("Album found: $it")

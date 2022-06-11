@@ -1,4 +1,4 @@
-package net.techbrewery.tvphotoframe.network
+package net.techbrewery.tvphotoframe.network.requests
 
 import net.techbrewery.tvphotoframe.BuildConfig
 

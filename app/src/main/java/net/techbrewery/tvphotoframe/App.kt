@@ -1,7 +1,8 @@
 package net.techbrewery.tvphotoframe
 
 import android.app.Application
-import net.techbrewery.tvphotoframe.core.koin.OauthModule
+import net.techbrewery.tvphotoframe.core.koin.OAuth2Module
+import net.techbrewery.tvphotoframe.core.koin.PhotosApiModule
 import net.techbrewery.tvphotoframe.core.koin.ViewModelModule
 import net.techbrewery.tvphotoframe.core.logs.DebugLogsTree
 import org.koin.android.ext.koin.androidContext
@@ -30,7 +31,8 @@ class App : Application() {
             androidContext(this@App)
             modules(
                 listOf(
-                    OauthModule.get,
+                    OAuth2Module.get,
+                    PhotosApiModule.get,
                     ViewModelModule.get
                 )
             )
