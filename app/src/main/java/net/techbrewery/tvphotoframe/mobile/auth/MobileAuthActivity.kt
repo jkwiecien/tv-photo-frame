@@ -42,11 +42,19 @@ class MobileAuthActivity : BaseActivity() {
             val accessTokenResponse =
                 withContext(Dispatchers.IO) { authApi.getAccessToken(AccessTokenRequestBody(authCode)) }
             DevDebugLog.log("Auth token received: $accessTokenResponse")
-            val albumsResponse =
-                withContext(Dispatchers.IO) { photosApi.getAlbums(accessTokenResponse.access_token) }
-            DevDebugLog.log("Next page token: ${albumsResponse.nextPageToken}")
-            albumsResponse.albums.forEach {
-                DevDebugLog.log("Album found: $it")
+
+//            val albumsResponse: AlbumsResponse =
+//                withContext(Dispatchers.IO) { photosApi.getAlbums(accessTokenResponse.access_token) }
+//            albumsResponse.albums.forEach { album -> DevDebugLog.log("Album found: ${album.title}. id: ${album.id}") }
+
+            val photosOfFamily = withContext(Dispatchers.IO) {
+                photosApi.getPhotosInAlbum(
+                    albumId = PhotosApi.TEMP_FAMILY_AND_FRIENDS_HARDCODED_ID,
+                    accessToken = accessTokenResponse.access_token
+                )
+            }
+            photosOfFamily.mediaItems.forEach { mediaItem ->
+                DevDebugLog.log("Photo found: ${mediaItem.productUrl}")
             }
         }
     }
