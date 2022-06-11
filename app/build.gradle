@@ -25,6 +25,8 @@ android {
         }
 
         buildConfigField "String", "REDIRECT_URI", "\"${secrets.getProperty("tvphotoframe.oauth.redirect.uri", System.getenv("TBTVPHOTOFRAME_OAUTH_REDIRECT_URI"))}\""
+
+        manifestPlaceholders = [appAuthRedirectScheme: 'com.redirectScheme.comm']
     }
 
     buildFeatures {
@@ -52,7 +54,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
             buildConfigField "String", "OAUTH_CLIENT_ID", "\"958960862779-ip0na3ls312h6u32e9jejfam46a3jfsd.apps.googleusercontent.com\""
-            buildConfigField "String", "OAUTH_CLIENT_SECRET", "\"${secrets.getProperty("tvphotoframe.oauth.client.secret", System.getenv("TBTVPHOTOFRAME_OAUTH_CLIENT_SECRET"))}\""
+            buildConfigField "String", "OAUTH_CLIENT_SECRET", "\"958960862779-ip0na3ls312h6u32e9jejfam46a3jfsd.apps.googleusercontent.com\""
+            buildConfigField "String", "OAUTH_WEB_CLIENT_ID", "\"958960862779-ip0na3ls312h6u32e9jejfam46a3jfsd.apps.googleusercontent.com\""
+            buildConfigField "String", "OAUTH_WEB_CLIENT_SECRET", "\"${secrets.getProperty("tvphotoframe.oauth.web.client.secret", System.getenv("TBTVPHOTOFRAME_OAUTH_WEB_CLIENT_SECRET"))}\""
         }
     }
 
@@ -84,27 +88,32 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.leanback:leanback:1.0.0'
 
-    implementation 'androidx.compose.ui:ui:1.0.5'
+    implementation 'androidx.compose.ui:ui:1.1.1'
     // Tooling support (Previews, etc.)
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation 'androidx.compose.foundation:foundation:1.0.5'
+    implementation 'androidx.compose.foundation:foundation:1.1.1'
     // Material Design
+<<<<<<< HEAD
     implementation 'androidx.compose.material:material:1.0.5'
     implementation 'androidx.compose.material3:material3:1.0.0-alpha09'
+=======
+    implementation 'androidx.compose.material:material:1.1.1'
+    implementation 'androidx.compose.material3:material3:1.0.0-alpha13'
+>>>>>>> attempt-web
     // Material design icons
-    implementation 'androidx.compose.material:material-icons-core:1.0.5'
-    implementation 'androidx.compose.material:material-icons-extended:1.0.5'
+    implementation 'androidx.compose.material:material-icons-core:1.1.1'
+    implementation 'androidx.compose.material:material-icons-extended:1.1.1'
     // Integration with activities
     implementation 'androidx.activity:activity-compose:1.4.0'
     // Integration with ViewModels
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
-    implementation 'com.google.api-client:google-api-client:1.31.5'
+    implementation 'com.google.api-client:google-api-client:1.32.2'
     implementation 'com.google.photos.library:google-photos-library-client:1.7.1'
     implementation platform('com.google.firebase:firebase-bom:29.0.4')
     implementation 'com.google.firebase:firebase-analytics'
@@ -114,13 +123,19 @@ dependencies {
     implementation "io.insert-koin:koin-android:$koin_version"
     implementation "io.insert-koin:koin-androidx-compose:$koin_version"
     implementation 'com.jakewharton.timber:timber:5.0.1'
-    implementation 'com.google.android.gms:play-services-auth:20.1.0'
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.5'
 
     // UI Tests
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.5'
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.1'
     androidTestImplementation "androidx.test:core:1.4.0"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
     // Koin Test features
     testImplementation "io.insert-koin:koin-test:$koin_version"
     testImplementation "io.insert-koin:koin-test-junit4:$koin_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation("com.squareup.okhttp3:logging-interceptor:3.9.0")
+
+    implementation "com.google.accompanist:accompanist-webview:$accompanist_version"
 }
