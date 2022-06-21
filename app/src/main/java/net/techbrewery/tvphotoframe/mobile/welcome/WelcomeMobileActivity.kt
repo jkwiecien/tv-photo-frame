@@ -3,16 +3,7 @@ package net.techbrewery.tvphotoframe.mobile.welcome
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Surface
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.Modifier
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 import net.techbrewery.tvphotoframe.core.BaseActivity
-import net.techbrewery.tvphotoframe.core.ui.google.GoogleSignInButton
-import net.techbrewery.tvphotoframe.core.ui.theme.AppTheme
 import net.techbrewery.tvphotoframe.network.OAuth2APi.Companion.AUTH_URL
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -34,28 +25,27 @@ class WelcomeMobileActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        startAuth()
 
-        val gso = GoogleSignIn.getLastSignedInAccount(this)
-        if (gso != null) startAuth()
-
-        setContent {
-            AppTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Column {
-                        if (gso == null) {
-                            GoogleSignInButton(
-                                onSignInClicked = { startAuth() }
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-//        if (gso != null) onLoggedIn(gso)
+//        val gso = GoogleSignIn.getLastSignedInAccount(this)
+//        if (gso != null) startAuth()
+//
+//        setContent {
+//            AppTheme {
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = MaterialTheme.colorScheme.background
+//                ) {
+//                    Column {
+//                        if (gso == null) {
+//                            GoogleSignInButton(
+//                                onSignInClicked = { startAuth() }
+//                            )
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun startAuth() {

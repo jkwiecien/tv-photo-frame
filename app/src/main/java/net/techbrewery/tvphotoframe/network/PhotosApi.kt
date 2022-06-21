@@ -17,15 +17,13 @@ interface PhotosApi {
 
     @GET("albums")
     suspend fun getAlbums(
-        @Query("access_token") accessToken: String,
         @Query("page_size") pageSize: Int = 20,
         @Query("pageToken") pageToken: String? = null
     ): AlbumsResponse
 
-    @POST("mediaItems:search")
+    @POST("mediaItems**search")
     suspend fun getPhotosInAlbum(
         @Query("albumId") albumId: String,
-        @Query("access_token") accessToken: String,
         @Query("pageSize") pageSize: Int = 100,
     ): PhotosResponse
 }

@@ -15,13 +15,11 @@
  */
 package net.techbrewery.tvphotoframe.network
 
-import retrofit2.Retrofit
-import okhttp3.ResponseBody
-import kotlin.Throws
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
-import net.techbrewery.tvphotoframe.network.ToStringConverterFactory
-import okhttp3.MediaType
+import okhttp3.ResponseBody
 import retrofit2.Converter
+import retrofit2.Retrofit
 import java.lang.reflect.Type
 
 class ToStringConverterFactory : Converter.Factory() {
@@ -47,6 +45,6 @@ class ToStringConverterFactory : Converter.Factory() {
     }
 
     companion object {
-        private val MEDIA_TYPE = MediaType.parse("text/plain")
+        private val MEDIA_TYPE = "text/plain".toMediaTypeOrNull()
     }
 }

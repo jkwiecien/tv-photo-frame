@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.techbrewery.tvphotoframe.core.BaseActivity
 import net.techbrewery.tvphotoframe.core.koin.OAuth2Module
-import net.techbrewery.tvphotoframe.core.koin.PhotosApiModule
+import net.techbrewery.tvphotoframe.core.koin.PhotosApiProvider
 import net.techbrewery.tvphotoframe.core.logs.DevDebugLog
 import net.techbrewery.tvphotoframe.network.OAuth2APi
 import net.techbrewery.tvphotoframe.network.PhotosApi
@@ -21,7 +21,6 @@ import org.koin.core.qualifier.named
 class MobileAuthActivity : BaseActivity() {
 
     private val authApi: OAuth2APi by inject(named(OAuth2Module.MODULE_NAME))
-    private val photosApi: PhotosApi by inject(named(PhotosApiModule.MODULE_NAME))
 
     companion object {
         fun start(activity: Activity) {
@@ -47,11 +46,11 @@ class MobileAuthActivity : BaseActivity() {
 //                withContext(Dispatchers.IO) { photosApi.getAlbums(accessTokenResponse.access_token) }
 //            albumsResponse.albums.forEach { album -> DevDebugLog.log("Album found: ${album.title}. id: ${album.id}") }
 
+
+            val photosApi =
+                PhotosApiProvider.getApi(this@MobileAuthActivity, accessTokenResponse.access_token)
             val photosOfFamily = withContext(Dispatchers.IO) {
-                photosApi.getPhotosInAlbum(
-                    albumId = PhotosApi.TEMP_FAMILY_AND_FRIENDS_HARDCODED_ID,
-                    accessToken = accessTokenResponse.access_token
-                )
+                photosApi.getPhotosInAlbum(PhotosApi.TEMP_FAMILY_AND_FRIENDS_HARDCODED_ID)
             }
             photosOfFamily.mediaItems.forEach { mediaItem ->
                 DevDebugLog.log("Photo found: ${mediaItem.productUrl}")
