@@ -1,0 +1,17 @@
+[
+    {
+        "relation":
+        [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target":
+        {
+            "namespace": "android_app",
+            "package_name": "net.techbrewery.tvphotoframe",
+            "sha256_cert_fingerprints":
+            [
+                "70:0b:30:3a:8c:cd:b5:61:e3:00:8d:8a:54:c6:c6:a2:e6:a7:84:8b:f7:09:85:0c:6e:46:4b:e4:7e:15:67:dc"
+            ]
+        }
+    }
+]

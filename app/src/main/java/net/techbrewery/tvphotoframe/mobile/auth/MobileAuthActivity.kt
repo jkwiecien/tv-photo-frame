@@ -9,18 +9,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.techbrewery.tvphotoframe.core.BaseActivity
-import net.techbrewery.tvphotoframe.core.koin.OAuth2Module
 import net.techbrewery.tvphotoframe.core.koin.PhotosApiProvider
 import net.techbrewery.tvphotoframe.core.logs.DevDebugLog
 import net.techbrewery.tvphotoframe.network.OAuth2APi
 import net.techbrewery.tvphotoframe.network.PhotosApi
 import net.techbrewery.tvphotoframe.network.requests.AccessTokenRequestBody
 import org.koin.android.ext.android.inject
-import org.koin.core.qualifier.named
 
 class MobileAuthActivity : BaseActivity() {
 
-    private val authApi: OAuth2APi by inject(named(OAuth2Module.MODULE_NAME))
+    private val authApi: OAuth2APi by inject()
 
     companion object {
         fun start(activity: Activity) {

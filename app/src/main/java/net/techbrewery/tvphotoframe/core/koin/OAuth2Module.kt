@@ -35,7 +35,7 @@ object OAuth2Module {
                     .client(get(named(MODULE_NAME)))
                     .build()
             }
-            single<OAuth2APi>(named(MODULE_NAME)) {
+            single<OAuth2APi> {
                 val retrofit: Retrofit = get(named(MODULE_NAME))
                 retrofit.create(OAuth2APi::class.java)
             }

@@ -18,7 +18,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import net.techbrewery.tvphotoframe.R
 import net.techbrewery.tvphotoframe.core.BaseActivity
@@ -27,6 +26,7 @@ import net.techbrewery.tvphotoframe.core.ui.google.GoogleSignInButton
 import net.techbrewery.tvphotoframe.core.ui.theme.AppTheme
 import net.techbrewery.tvphotoframe.core.ui.theme.Spacing
 import net.techbrewery.tvphotoframe.core.ui.theme.Typography
+import net.techbrewery.tvphotoframe.network.OAuth2APi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WelcomeActivity : BaseActivity() {
@@ -42,16 +42,20 @@ class WelcomeActivity : BaseActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     SignInContent(
-                        email = viewModel.emailState,
-                        onEmailChanged = { viewModel.setEmail(it) },
-                        password = viewModel.passwordState,
-                        onPasswordChanged = { viewModel.setPassword(it) },
-                        onSignInClicked = { viewModel.onSignInClicked() }
+                        onSignInClicked = {
+//                            viewModel.onAuthorizeClicked()
+                            startWebAuth()
+                        }
                     )
                 }
             }
         }
         setupStateObservers()
+    }
+
+    private fun startWebAuth() {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(OAuth2APi.AUTH_URL.toString()))
+        startActivity(browserIntent)
     }
 
     private fun setupStateObservers() {
@@ -79,10 +83,6 @@ class WelcomeActivity : BaseActivity() {
 
 @Composable
 fun SignInContent(
-    email: String = "",
-    onEmailChanged: (String) -> Unit = {},
-    password: String = "",
-    onPasswordChanged: (String) -> Unit = {},
     onSignInClicked: () -> Unit = {}
 ) {
     Column(
