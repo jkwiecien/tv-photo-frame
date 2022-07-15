@@ -13,9 +13,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.techbrewery.tvphotoframe.R
-import net.techbrewery.tvphotoframe.core.ui.theme.AppTheme
-import net.techbrewery.tvphotoframe.core.ui.theme.Dimens.ButtonPadding
-import net.techbrewery.tvphotoframe.core.ui.theme.Typography
+import net.techbrewery.tvphotoframe.core.ui.theme.DimensTV.ButtonPadding
+import net.techbrewery.tvphotoframe.core.ui.theme.TvTheme
+import net.techbrewery.tvphotoframe.core.ui.theme.TypographyTV
 
 @Composable
 fun GoogleSignInButton(onSignInClicked: () -> Unit) {
@@ -32,7 +32,7 @@ fun GoogleSignInButton(onSignInClicked: () -> Unit) {
         )
         Text(
             text = "Sign in with Google",
-            style = Typography.labelLarge,
+            style = TypographyTV.labelLarge,
             modifier = Modifier.padding(ButtonPadding)
         )
     }
@@ -44,7 +44,7 @@ fun GoogleSignInButton(onSignInClicked: () -> Unit) {
 )
 @Composable
 fun DefaultPreview() {
-    AppTheme {
+    TvTheme {
         GoogleSignInButton {}
     }
 }

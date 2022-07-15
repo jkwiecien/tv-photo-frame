@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -111,11 +112,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation 'androidx.security:security-crypto:1.0.0'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'com.google.api-client:google-api-client:1.32.2'
-    implementation 'com.google.photos.library:google-photos-library-client:1.7.1'
-    implementation platform('com.google.firebase:firebase-bom:29.0.4')
-    implementation 'com.google.firebase:firebase-auth-ktx:21.0.6'
-    implementation 'com.google.firebase:firebase-analytics-ktx:21.0.0'
     implementation 'com.google.android.gms:play-services-auth:20.2.0'
     // Koin Core features
     implementation "io.insert-koin:koin-core:$koin_version"
@@ -123,6 +121,11 @@ dependencies {
     implementation "io.insert-koin:koin-android:$koin_version"
     implementation "io.insert-koin:koin-androidx-compose:$koin_version"
     implementation 'com.jakewharton.timber:timber:5.0.1'
+
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
 
     // UI Tests
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.1'

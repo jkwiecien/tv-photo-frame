@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.lifecycleScope
+import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -21,20 +21,17 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import net.techbrewery.tvphotoframe.BuildConfig
 import net.techbrewery.tvphotoframe.core.BaseActivity
 import net.techbrewery.tvphotoframe.core.BundleKeys
 import net.techbrewery.tvphotoframe.core.RequestCodes
 import net.techbrewery.tvphotoframe.core.koin.PhotosApiProvider
 import net.techbrewery.tvphotoframe.core.logs.DevDebugLog
-import net.techbrewery.tvphotoframe.core.ui.components.ViewRoot
+import net.techbrewery.tvphotoframe.core.ui.components.MobileViewRoot
+import net.techbrewery.tvphotoframe.core.ui.components.PrimaryButton
 import net.techbrewery.tvphotoframe.core.ui.google.GoogleSignInButton
-import net.techbrewery.tvphotoframe.core.ui.theme.Spacing
+import net.techbrewery.tvphotoframe.core.ui.theme.SpacingMobile
 import net.techbrewery.tvphotoframe.network.OAuth2APi.Companion.AUTH_URL
-import net.techbrewery.tvphotoframe.network.PhotosApi
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -61,7 +58,7 @@ class WelcomeMobileActivity : BaseActivity() {
 
     private fun displayAuthUi() {
         setContent {
-            ViewRoot {
+            MobileViewRoot {
                 AuthContent(
                     onSignInClicked = { startGoogleAuth() }
                 )
@@ -138,8 +135,10 @@ class WelcomeMobileActivity : BaseActivity() {
 
     private fun onUserResumed(user: FirebaseUser) {
         setContent {
-            ViewRoot {
-                WelcomeContent()
+            MobileViewRoot {
+                WelcomeContent(
+                    onSyncPhotosClicked = { viewModel.syncPhotos() }
+                )
             }
         }
         DevDebugLog.log("User resumed")
@@ -150,20 +149,8 @@ class WelcomeMobileActivity : BaseActivity() {
         val accessToken = sharedPreferences.getString(BundleKeys.PHOTOS_ACCESS_TOKEN, null)
         if (accessToken != null) {
             PhotosApiProvider.initApi(this, accessToken)
-            fetchPhotos()
         } else {
             authPhotos()
-        }
-    }
-
-    private fun fetchPhotos() {
-        lifecycleScope.launch(Dispatchers.Main) {
-            val photosOfFamily = withContext(Dispatchers.IO) {
-                PhotosApiProvider.photosApi.getPhotosInAlbum(PhotosApi.TEMP_FAMILY_AND_FRIENDS_HARDCODED_ID)
-            }
-            photosOfFamily.mediaItems.forEach { mediaItem ->
-                DevDebugLog.log("Photo found: ${mediaItem.productUrl}")
-            }
         }
     }
 
@@ -205,7 +192,7 @@ private fun AuthContent(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .padding(Spacing.Large),
+            .padding(SpacingMobile.Large),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -214,15 +201,38 @@ private fun AuthContent(
 }
 
 @Composable
-private fun WelcomeContent() {
+private fun WelcomeContent(
+    onSyncPhotosClicked: () -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .padding(Spacing.Large),
+            .padding(SpacingMobile.Large),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Fetching photos...")
+        Text(text = "Hello. What's cookin?")
+        SpacingMobile.LargeSpacingBox()
+        PrimaryButton(
+            title = "Sync photos",
+            onClick = onSyncPhotosClicked
+        )
+        SpacingMobile.SmallSpacingBox()
+        PrimaryButton(
+            title = "Connect TV",
+            onClick = {
+                //TODO
+            }
+        )
+    }
+}
+
+@Preview
+    (showBackground = true)
+@Composable
+private fun WelcomeContentPreview() {
+    MobileViewRoot {
+        WelcomeContent()
     }
 }

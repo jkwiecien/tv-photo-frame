@@ -6,5 +6,5 @@ data class PhotoApiModel(
     val focalLength: Float,
     val apertureFNumber: Float,
     val isoEquivalent: Int,
-    val exposureTime: String,
+    val exposureTime: String
 )

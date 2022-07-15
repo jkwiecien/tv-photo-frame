@@ -25,9 +25,9 @@ import net.techbrewery.tvphotoframe.R
 import net.techbrewery.tvphotoframe.core.BaseActivity
 import net.techbrewery.tvphotoframe.core.logs.DevDebugLog
 import net.techbrewery.tvphotoframe.core.ui.google.GoogleSignInButton
-import net.techbrewery.tvphotoframe.core.ui.theme.AppTheme
-import net.techbrewery.tvphotoframe.core.ui.theme.Spacing
-import net.techbrewery.tvphotoframe.core.ui.theme.Typography
+import net.techbrewery.tvphotoframe.core.ui.theme.SpacingTV
+import net.techbrewery.tvphotoframe.core.ui.theme.TvTheme
+import net.techbrewery.tvphotoframe.core.ui.theme.TypographyTV
 import net.techbrewery.tvphotoframe.network.OAuth2APi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -38,7 +38,7 @@ class TvAuthActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AppTheme {
+            TvTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -96,7 +96,7 @@ private fun SignInContent(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .padding(Spacing.Large),
+            .padding(SpacingTV.Large),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -116,7 +116,7 @@ private fun SignInContent(
 fun Title() {
     Text(
         text = stringResource(R.string.title_activity_welcome),
-        style = Typography.titleLarge
+        style = TypographyTV.titleLarge
     )
 }
 
@@ -124,8 +124,8 @@ fun Title() {
 fun SignInDisclaimer() {
     Text(
         text = "W końcu sie doigra", //FIXME
-        style = Typography.bodyLarge,
-        modifier = Modifier.padding(Spacing.Small)
+        style = TypographyTV.bodyLarge,
+        modifier = Modifier.padding(SpacingTV.Small)
     )
 }
 
@@ -137,14 +137,14 @@ fun CredentialsTextFields(
     onPasswordChanged: (String) -> Unit
 ) {
     Column(
-        modifier = Modifier.padding(Spacing.Large)
+        modifier = Modifier.padding(SpacingTV.Large)
     ) {
         TextField(
             value = email,
 //            label = { Text("Email") }, //FIXME
             onValueChange = onEmailChanged
         )
-        Spacer(Modifier.height(Spacing.Small))
+        Spacer(Modifier.height(SpacingTV.Small))
         TextField(
             value = password,
 //            label = { Text("Password") }, //FIXME
@@ -162,7 +162,7 @@ fun CredentialsTextFields(
 )
 @Composable
 fun SignInContentDarkPreview() {
-    AppTheme {
+    TvTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
