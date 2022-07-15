@@ -25,6 +25,7 @@ android {
         }
 
         buildConfigField "String", "REDIRECT_URI", "\"${secrets.getProperty("tvphotoframe.oauth.redirect.uri", System.getenv("TBTVPHOTOFRAME_OAUTH_REDIRECT_URI"))}\""
+        buildConfigField "String", "SHARED_PREF_KEY", "\"${secrets.getProperty("tvphotoframe.sharedpreferences.key", System.getenv("TBTVPHOTOFRAME_SHARED_PREF_KEY"))}\""
 
         manifestPlaceholders = [appAuthRedirectScheme: 'com.redirectScheme.comm']
     }
@@ -53,9 +54,8 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
-            buildConfigField "String", "OAUTH_CLIENT_ID", "\"958960862779-ip0na3ls312h6u32e9jejfam46a3jfsd.apps.googleusercontent.com\""
-            buildConfigField "String", "OAUTH_TV_CLIENT_ID", "\"958960862779-448m2pm3o3t59i155khrrum71neaeajl.apps.googleusercontent.com\""
-            buildConfigField "String", "OAUTH_TV_CLIENT_SECRET", "\"${secrets.getProperty("tvphotoframe.oauth.tv.client.secret", System.getenv("TBTVPHOTOFRAME_OAUTH_TV_CLIENT_SECRET"))}\""
+            buildConfigField "String", "OAUTH_ANDROID_CLIENT_ID", "\"958960862779-448m2pm3o3t59i155khrrum71neaeajl.apps.googleusercontent.com\""
+            buildConfigField "String", "OAUTH_ANDROID_CLIENT_SECRET", "\"${secrets.getProperty("tvphotoframe.oauth.tv.client.secret", System.getenv("TBTVPHOTOFRAME_OAUTH_TV_CLIENT_SECRET"))}\""
             buildConfigField "String", "OAUTH_WEB_CLIENT_ID", "\"958960862779-ip0na3ls312h6u32e9jejfam46a3jfsd.apps.googleusercontent.com\""
             buildConfigField "String", "OAUTH_WEB_CLIENT_SECRET", "\"${secrets.getProperty("tvphotoframe.oauth.web.client.secret", System.getenv("TBTVPHOTOFRAME_OAUTH_WEB_CLIENT_SECRET"))}\""
         }
@@ -101,27 +101,29 @@ dependencies {
     implementation 'androidx.compose.foundation:foundation:1.1.1'
     // Material Design
     implementation 'androidx.compose.material:material:1.1.1'
-    implementation 'androidx.compose.material3:material3:1.0.0-alpha13'
+    implementation 'androidx.compose.material3:material3:1.0.0-alpha14'
     // Material design icons
     implementation 'androidx.compose.material:material-icons-core:1.1.1'
     implementation 'androidx.compose.material:material-icons-extended:1.1.1'
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.activity:activity-compose:1.5.0'
     // Integration with ViewModels
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation 'androidx.security:security-crypto:1.0.0'
     implementation 'com.google.api-client:google-api-client:1.32.2'
     implementation 'com.google.photos.library:google-photos-library-client:1.7.1'
     implementation platform('com.google.firebase:firebase-bom:29.0.4')
-    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.6'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.0.0'
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
     // Koin Core features
     implementation "io.insert-koin:koin-core:$koin_version"
     // Koin main features for Android
     implementation "io.insert-koin:koin-android:$koin_version"
     implementation "io.insert-koin:koin-androidx-compose:$koin_version"
     implementation 'com.jakewharton.timber:timber:5.0.1'
-    implementation 'com.google.android.gms:play-services-auth:20.2.0'
-    implementation 'com.google.firebase:firebase-auth-ktx:21.0.5'
+
     // UI Tests
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.1'
     androidTestImplementation "androidx.test:core:1.4.0"

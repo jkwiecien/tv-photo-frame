@@ -10,6 +10,6 @@ object ViewModelModule {
     val get: Module
         get() = module {
             viewModel { WelcomeViewModel(get()) }
-            viewModel { WelcomeMobileViewModel(get()) }
+            viewModel { WelcomeMobileViewModel() }
         }
 }

@@ -1,6 +1,7 @@
 package net.techbrewery.tvphotoframe
 
 import android.app.Application
+import net.techbrewery.tvphotoframe.core.koin.CoreModule
 import net.techbrewery.tvphotoframe.core.koin.OAuth2Module
 import net.techbrewery.tvphotoframe.core.koin.ViewModelModule
 import net.techbrewery.tvphotoframe.core.logs.DebugLogsTree
@@ -30,6 +31,7 @@ class App : Application() {
             androidContext(this@App)
             modules(
                 listOf(
+                    CoreModule.get,
                     OAuth2Module.get,
                     ViewModelModule.get
                 )

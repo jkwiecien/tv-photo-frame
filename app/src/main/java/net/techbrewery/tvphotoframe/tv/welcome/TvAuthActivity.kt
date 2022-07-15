@@ -5,6 +5,8 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.TextField
 import androidx.compose.material3.MaterialTheme
@@ -29,7 +31,7 @@ import net.techbrewery.tvphotoframe.core.ui.theme.Typography
 import net.techbrewery.tvphotoframe.network.OAuth2APi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class WelcomeActivity : BaseActivity() {
+class TvAuthActivity : BaseActivity() {
 
     private val viewModel by viewModel<WelcomeViewModel>()
 
@@ -43,8 +45,7 @@ class WelcomeActivity : BaseActivity() {
                 ) {
                     SignInContent(
                         onSignInClicked = {
-//                            viewModel.onAuthorizeClicked()
-                            startWebAuth()
+//                            startGoogleAuth()
                         }
                     )
                 }
@@ -52,6 +53,12 @@ class WelcomeActivity : BaseActivity() {
         }
         setupStateObservers()
     }
+
+    private val googleSignInLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            //TODO
+        }
+
 
     private fun startWebAuth() {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(OAuth2APi.AUTH_URL.toString()))
@@ -82,7 +89,7 @@ class WelcomeActivity : BaseActivity() {
 }
 
 @Composable
-fun SignInContent(
+private fun SignInContent(
     onSignInClicked: () -> Unit = {}
 ) {
     Column(

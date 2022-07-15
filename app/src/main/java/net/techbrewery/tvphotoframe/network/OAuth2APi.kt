@@ -21,7 +21,7 @@ interface OAuth2APi {
             .scheme("https")
             .host("accounts.google.com")
             .encodedPath("/o/oauth2/v2/auth")
-            .addQueryParameter("client_id", BuildConfig.OAUTH_CLIENT_ID)
+            .addQueryParameter("client_id", BuildConfig.OAUTH_WEB_CLIENT_ID)
             .addQueryParameter("redirect_uri", BuildConfig.REDIRECT_URI)
             .addQueryParameter("response_type", "code")
             .addQueryParameter("scope", SCOPES)
@@ -45,7 +45,7 @@ interface OAuth2APi {
     @FormUrlEncoded
     @POST("device/code")
     suspend fun getDeviceCode(
-        @Field("client_id") clientId: String = BuildConfig.OAUTH_TV_CLIENT_ID,
+        @Field("client_id") clientId: String = BuildConfig.OAUTH_ANDROID_CLIENT_ID,
         @Field("scope") scopes: String = OAuth2APi.SCOPES
     ): DeviceCodeResponse
 }

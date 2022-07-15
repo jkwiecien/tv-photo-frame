@@ -17,7 +17,8 @@ import java.util.concurrent.TimeUnit
 object PhotosApiProvider {
 
     private lateinit var okHttpClient: OkHttpClient
-    private var photosApi: PhotosApi? = null
+    lateinit var photosApi: PhotosApi
+        private set
 
     private fun createCache(context: Context): Cache {
         val cacheDirectory = File(context.cacheDir, "HttpResponseCache")
@@ -41,41 +42,32 @@ object PhotosApiProvider {
         chain.proceed(request)
     }
 
-    fun getApi(
+    fun initApi(
         context: Context,
         accessToken: String
-    ): PhotosApi {
-
-        val api = photosApi
-        if (api != null) {
-            return api
-        } else {
-            val loggingInterceptor = HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BASIC
-            }
-            okHttpClient = OkHttpClient.Builder()
-                .cache(createCache(context))
-                .readTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .addInterceptor(loggingInterceptor)
-                .addInterceptor(createAuthHeaderInterceptor(accessToken))
-                .addInterceptor(createUrlColonInterceptor())
-                .protocols(listOf(Protocol.HTTP_1_1, Protocol.HTTP_2))
-                .build()
-
-
-            val retrofit = Retrofit.Builder()
-                .baseUrl("https://photoslibrary.googleapis.com/v1/")
-                .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
-                .addConverterFactory(ToStringConverterFactory())
-                .client(okHttpClient)
-                .build()
-
-            val api = retrofit.create(PhotosApi::class.java)
-            photosApi = api
-            return api
+    ) {
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BASIC
         }
+        okHttpClient = OkHttpClient.Builder()
+            .cache(createCache(context))
+            .readTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(createAuthHeaderInterceptor(accessToken))
+            .addInterceptor(createUrlColonInterceptor())
+            .protocols(listOf(Protocol.HTTP_1_1, Protocol.HTTP_2))
+            .build()
 
 
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://photoslibrary.googleapis.com/v1/")
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+            .addConverterFactory(ToStringConverterFactory())
+            .client(okHttpClient)
+            .build()
+
+        val api = retrofit.create(PhotosApi::class.java)
+        photosApi = api
     }
 }
