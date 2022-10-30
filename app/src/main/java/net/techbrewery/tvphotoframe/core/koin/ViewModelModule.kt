@@ -1,5 +1,6 @@
 package net.techbrewery.tvphotoframe.core.koin
 
+import net.techbrewery.tvphotoframe.mobile.photos.GallerySyncViewModel
 import net.techbrewery.tvphotoframe.mobile.welcome.WelcomeMobileViewModel
 import net.techbrewery.tvphotoframe.tv.welcome.WelcomeViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -11,5 +12,6 @@ object ViewModelModule {
         get() = module {
             viewModel { WelcomeViewModel() }
             viewModel { WelcomeMobileViewModel(get()) }
+            viewModel { GallerySyncViewModel(get()) }
         }
 }

@@ -11,6 +11,18 @@
         android:name="android.hardware.touchscreen"
         android:required="false" />
 
+
+    <!-- Required only if your app needs to access images or photos
+     that other apps created. -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+
+    <!-- If your app doesn't need to access media files that other apps created,
+         set the "maxSdkVersion" attribute to "28" instead. -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -64,6 +76,11 @@
             android:name=".tv.albums.AlbumsActivity"
             android:exported="false"
             android:label="@string/title_activity_albums"
+            android:theme="@style/Theme.TVPhotoFrame" />
+
+        <activity
+            android:name=".mobile.photos.GallerySyncActivity"
+            android:exported="false"
             android:theme="@style/Theme.TVPhotoFrame" />
 
         <activity

@@ -8,7 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.techbrewery.tvphotoframe.core.BaseActivity
-import net.techbrewery.tvphotoframe.core.BundleKeys
 import net.techbrewery.tvphotoframe.core.koin.PhotosApiProvider
 import net.techbrewery.tvphotoframe.core.logs.DevDebugLog
 import net.techbrewery.tvphotoframe.network.OAuth2APi
@@ -32,33 +31,11 @@ class PhotosAuthRedirectActivity : BaseActivity() {
             val accessTokenResponse =
                 withContext(Dispatchers.IO) { authApi.getAccessToken(AccessTokenRequestBody(authCode)) }
             DevDebugLog.log("Auth token received: $accessTokenResponse")
-            sharedPreferences.edit()
-                .putString(BundleKeys.PHOTOS_ACCESS_TOKEN, accessTokenResponse.access_token)
-                .putString(BundleKeys.PHOTOS_REFRESH_TOKEN, accessTokenResponse.refresh_token)
-                .commit()
             PhotosApiProvider.initApi(
                 this@PhotosAuthRedirectActivity,
                 accessTokenResponse.access_token
             )
             finish()
-
-//            val albumsResponse: AlbumsResponse =
-//                withContext(Dispatchers.IO) { photosApi.getAlbums(accessTokenResponse.access_token) }
-//            albumsResponse.albums.forEach { album -> DevDebugLog.log("Album found: ${album.title}. id: ${album.id}") }
-
-
-//            val photosApi =
-//                PhotosApiProvider.getApi(
-//                    this@PhotosAuthRedirectActivity,
-//                    accessTokenResponse.access_token
-//                )
-//            val photosOfFamily = withContext(Dispatchers.IO) {
-//                photosApi.getPhotosInAlbum(PhotosApi.TEMP_FAMILY_AND_FRIENDS_HARDCODED_ID)
-//            }
-//            photosOfFamily.mediaItems.forEach { mediaItem ->
-//                DevDebugLog.log("Photo found: ${mediaItem.productUrl}")
-//            }
         }
     }
-
 }

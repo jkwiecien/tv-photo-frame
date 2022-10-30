@@ -21,5 +21,8 @@ object CoreModule {
             single {
                 PreferenceManager.getDefaultSharedPreferences(androidContext())
             }
+            single {
+                androidContext().applicationContext.contentResolver
+            }
         }
 }

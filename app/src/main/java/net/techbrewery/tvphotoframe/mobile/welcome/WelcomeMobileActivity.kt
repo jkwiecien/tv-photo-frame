@@ -3,7 +3,6 @@ package net.techbrewery.tvphotoframe.mobile.welcome
 import android.content.Intent
 import android.content.IntentSender.SendIntentException
 import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -13,25 +12,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import net.techbrewery.tvphotoframe.BuildConfig
 import net.techbrewery.tvphotoframe.core.BaseActivity
-import net.techbrewery.tvphotoframe.core.BundleKeys
 import net.techbrewery.tvphotoframe.core.RequestCodes
-import net.techbrewery.tvphotoframe.core.koin.PhotosApiProvider
 import net.techbrewery.tvphotoframe.core.logs.DevDebugLog
 import net.techbrewery.tvphotoframe.core.ui.components.MobileViewRoot
 import net.techbrewery.tvphotoframe.core.ui.components.PrimaryButton
 import net.techbrewery.tvphotoframe.core.ui.google.GoogleSignInButton
 import net.techbrewery.tvphotoframe.core.ui.theme.SpacingMobile
-import net.techbrewery.tvphotoframe.network.OAuth2APi.Companion.AUTH_URL
+import net.techbrewery.tvphotoframe.mobile.photos.GallerySyncActivity
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -47,14 +41,16 @@ class WelcomeMobileActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        oneTapClient = Identity.getSignInClient(this)
-        firebaseAuth = Firebase.auth
+//        oneTapClient = Identity.getSignInClient(this)
+//        firebaseAuth = Firebase.auth
+
+        GallerySyncActivity.start(this)
     }
 
-    override fun onResume() {
-        super.onResume()
-        tryResumingFirebaseUser()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        tryResumingFirebaseUser()
+//    }
 
     private fun displayAuthUi() {
         setContent {
@@ -137,26 +133,13 @@ class WelcomeMobileActivity : BaseActivity() {
         setContent {
             MobileViewRoot {
                 WelcomeContent(
-                    onSyncPhotosClicked = { viewModel.syncPhotos() }
+                    onSyncPhotosClicked = {
+                        GallerySyncActivity.start(this)
+                    }
                 )
             }
         }
         DevDebugLog.log("User resumed")
-        checkPhotosAuth()
-    }
-
-    private fun checkPhotosAuth() {
-        val accessToken = sharedPreferences.getString(BundleKeys.PHOTOS_ACCESS_TOKEN, null)
-        if (accessToken != null) {
-            PhotosApiProvider.initApi(this, accessToken)
-        } else {
-            authPhotos()
-        }
-    }
-
-    private fun authPhotos() {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(AUTH_URL.toString()))
-        startActivity(browserIntent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -166,14 +149,11 @@ class WelcomeMobileActivity : BaseActivity() {
             try {
                 val credential = oneTapClient.getSignInCredentialFromIntent(data)
                 val idToken = credential.googleIdToken
-//                val username = credential.id
                 val password = credential.password
                 if (idToken != null) {
                     Timber.d("Got ID token.")
                     firebaseAuthWithIdToken(idToken)
                 } else if (password != null) {
-                    // Got a saved username and password. Use them to authenticate
-                    // with your backend.
                     Timber.d("Got password.")
                 }
             } catch (error: ApiException) {
